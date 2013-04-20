@@ -30,13 +30,14 @@ function closest_store_menu(){
 }
 
 function closest_store($lat,$long){
-	
-	$ref = array(49.648881, -103.575312);
+	// current position of the device with gps 
+	$ref = array($lat,$long);
 
+ // list containig the stores iformation ** hardcoded to be replaced
 	$items = array(
-	    '0' => array('item1','otheritem1details....','55.645645','-42.5323'),
-	    '1' => array('item2','otheritem1details....','100.645645','-402.5323'),
-	    '2' => array('item3','otheritem1details....','33.645645','-42.5323'),
+	    '0' => array('Casablanca','otheritem1details....','33.513919','-7.459717'),
+	    '1' => array('khribga','otheritem1details....','32.861132','-6.888428'),
+	    '2' => array('morenear','otheritem1details....','33.728908','-7.303162'),
 	    '3' => array('item4','otheritem1details....','33.645645','-42.5323'),
 	);
 
@@ -46,8 +47,7 @@ function closest_store($lat,$long){
 	}, $items);
 
 	asort($distances);
-
-//echo 'Closest item is: ', var_dump($items[key($distances)]);
-
-	return $lat.$long;
+	$json_output = drupal_json_output($items[key($distances)]);
+	drupal_exit();
+	return $json_output;
 }
