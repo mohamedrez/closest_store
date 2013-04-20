@@ -1,0 +1,3 @@
+name = Closest Store
+description = This module provide json data about the nearest store
+core = 7.x
