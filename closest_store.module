@@ -1,0 +1,53 @@
+<?php
+
+
+// calculating the distance between two lat/long points
+function distance($a, $b)
+{
+    list($lat1, $lon1) = $a;
+    list($lat2, $lon2) = $b;
+
+    $theta = $lon1 - $lon2;
+    $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+    $dist = acos($dist);
+    $dist = rad2deg($dist);
+    $miles = $dist * 60 * 1.1515;
+    return $miles;
+}
+
+
+
+
+
+function closest_store_menu(){
+	$items['closest/store'] = array(
+		'page callback' => 'closest_store',
+		'page arguments' => array(2,3),
+		'access arguments' => array('access content')
+		);
+	return $items;
+
+}
+
+function closest_store($lat,$long){
+	
+	$ref = array(49.648881, -103.575312);
+
+	$items = array(
+	    '0' => array('item1','otheritem1details....','55.645645','-42.5323'),
+	    '1' => array('item2','otheritem1details....','100.645645','-402.5323'),
+	    '2' => array('item3','otheritem1details....','33.645645','-42.5323'),
+	    '3' => array('item4','otheritem1details....','33.645645','-42.5323'),
+	);
+
+	$distances = array_map(function($item) use($ref) {
+	    $a = array_slice($item, -2);
+	    return distance($a, $ref);
+	}, $items);
+
+	asort($distances);
+
+//echo 'Closest item is: ', var_dump($items[key($distances)]);
+
+	return $lat.$long;
+}
