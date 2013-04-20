@@ -15,32 +15,46 @@ function distance($a, $b)
     return $miles;
 }
 
+function get_stores()
+{	
+	// pulling the entites ("stores") information from the database  **  to be cached 
+	$query = new EntityFieldQuery();
+	$query
+	 ->entityCondition("entity_type", "node")
+	 ->entityCondition("bundle", "store")
+	 ->propertyCondition("status", 1);
+
+	 $result = $query->execute();
+	 $nids = array_keys($result["node"]);
+	 $stores = node_load_multiple($nids);
+
+// list containig the stores iformation 	 
+	 $items = array();
+	 foreach ($stores as $key => $value) {
+	 	$items[] = array($value->title,$value->body,$value->field_location["und"][0]["lat"],$value->field_location["und"][0]["lon"]);
+	 }
+	 return $items;
+}
 
 
 
-
-function closest_store_menu(){
+function closest_store_menu()
+{
 	$items['closest/store'] = array(
 		'page callback' => 'closest_store',
 		'page arguments' => array(2,3),
 		'access arguments' => array('access content')
 		);
 	return $items;
-
 }
 
-function closest_store($lat,$long){
+function closest_store($lat,$long)
+{
 	// current position of the device with gps 
 	$ref = array($lat,$long);
 
- // list containig the stores iformation ** hardcoded to be replaced
-	$items = array(
-	    '0' => array('Casablanca','otheritem1details....','33.513919','-7.459717'),
-	    '1' => array('khribga','otheritem1details....','32.861132','-6.888428'),
-	    '2' => array('morenear','otheritem1details....','33.728908','-7.303162'),
-	    '3' => array('item4','otheritem1details....','33.645645','-42.5323'),
-	);
 
+	$items = get_stores();
 	$distances = array_map(function($item) use($ref) {
 	    $a = array_slice($item, -2);
 	    return distance($a, $ref);
