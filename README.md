@@ -1,7 +1,7 @@
 closest_store
 =============
 
-This is a drupal module that output json inforamtion of the closest location (geofield)
+This is a drupal 7 module that output json inforamtion of the closest location (geofield)
 
 
 Credits:
